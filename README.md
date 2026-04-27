@@ -1,11 +1,7 @@
-> For developer
-
-    Please run `make init` to initialize the project.
-
-# {{.Name}}
+# YouDao translator
 
 # Install
 
 ```
-wpm install {{.Name}}
+wpm install YouDao translator
 ```
