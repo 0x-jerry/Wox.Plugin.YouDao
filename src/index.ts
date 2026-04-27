@@ -31,7 +31,7 @@ export const plugin: Plugin = {
 
     if (!content) {
       return buildHelpResult(
-        'Type text to translate. You can use `yd en:zh hello` to override languages for one query.',
+        'Type text to translate.',
       )
     }
 
