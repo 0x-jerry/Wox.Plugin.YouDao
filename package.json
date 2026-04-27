@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "tsdown",
-    "pack": "bun run scripts/pack.ts"
+    "pack": "bun run scripts/pack.ts",
+    "fmt": "oxfmt src"
   },
   "devDependencies": {
     "@types/bun": "^1.3.13",

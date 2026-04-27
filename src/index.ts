@@ -30,9 +30,7 @@ export const plugin: Plugin = {
     const content = resolveContent(query)
 
     if (!content) {
-      return buildHelpResult(
-        'Type text to translate.',
-      )
+      return buildHelpResult('Type text to translate.')
     }
 
     return [
