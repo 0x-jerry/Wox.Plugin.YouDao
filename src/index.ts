@@ -1,49 +1,52 @@
-import { ActionContext, Context, Plugin, PluginInitParams, PublicAPI, Query, Result } from "@wox-launcher/wox-plugin"
+import {
+  Context,
+  Plugin,
+  PluginInitParams,
+  PublicAPI,
+  Query,
+  Result,
+} from '@wox-launcher/wox-plugin'
+import { getTranslateAction } from './actions'
+import { getSettings, parseLangOverride, resolveContent } from './settings'
+import { appIcon, buildHelpResult } from './ui'
 
 let api: PublicAPI
 
 export const plugin: Plugin = {
   init: async (ctx: Context, initParams: PluginInitParams) => {
     api = initParams.API
-    await api.Log(ctx, "Info", "Init finished")
+    await api.Log(ctx, 'Info', 'Init finished')
   },
 
   query: async (ctx: Context, query: Query): Promise<Result[]> => {
+    const settings = await getSettings(api, ctx)
+    if (!settings.appKey || !settings.appSecret) {
+      return buildHelpResult('Please set both App Key and App Secret in plugin settings.')
+    }
+
+    const langOverride = parseLangOverride(query)
+    const fromLanguage = langOverride.fromLanguage ?? settings.fromLanguage
+    const toLanguage = langOverride.toLanguage ?? settings.toLanguage
+    const content = resolveContent(query)
+
+    if (!content) {
+      return buildHelpResult(
+        'Type text to translate. You can use `yd en:zh hello` to override languages for one query.',
+      )
+    }
+
     return [
       {
-        Title: "Hello World " + query.Search,
-        SubTitle: "This is a subtitle",
-        Icon: {
-          ImageType: "relative",
-          ImageData: "images/app.svg"
-        },
+        Title: 'Youdao Translate',
+        SubTitle: `${fromLanguage} -> ${toLanguage}`,
+        Icon: appIcon,
         Preview: {
-          PreviewType: "text",
-          PreviewData: "This is a preview",
-          PreviewProperties: {
-            Property1: "Hello World",
-            Property2: "This is a property"
-          }
+          PreviewType: 'text',
+          PreviewData: content,
+          PreviewProperties: {},
         },
-        Tails: [
-          {
-            Type: "text",
-            Text: "This is a tail"
-          }
-        ],
-        Actions: [
-          {
-            Name: "Open",
-            ContextData: {
-              search: query.Search
-            },
-            Action: async (actionCtx: Context, actionContext: ActionContext) => {
-              await api.Log(actionCtx, "Info", `Open action executed with search: ${actionContext.ContextData.search}`)
-              await api.Notify(actionCtx, `You searched for: ${actionContext.ContextData.search}`)
-            }
-          }
-        ]
-      }
+        Actions: await getTranslateAction(api, content, fromLanguage, toLanguage, settings),
+      },
     ]
-  }
+  },
 }

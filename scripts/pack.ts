@@ -1,8 +1,34 @@
-import { $ } from "bun";
+import { $ } from 'bun'
+import { readdir } from 'node:fs/promises'
+import { join } from 'node:path'
 
 // build
 for await (const line of $`tsdown`.lines()) {
   console.log(line)
 }
 
-// pack to .wox
+const archive = await archiveDirectory('dist')
+
+Bun.write(`Wox.Plugin.YouDao.wox`, archive)
+
+async function archiveDirectory(dir: string, compress = false): Promise<Bun.Archive> {
+  const files: Record<string, Blob> = {}
+
+  async function walk(currentDir: string, prefix: string = '') {
+    const entries = await readdir(currentDir, { withFileTypes: true })
+
+    for (const entry of entries) {
+      const fullPath = join(currentDir, entry.name)
+      const archivePath = prefix ? `${prefix}/${entry.name}` : entry.name
+
+      if (entry.isDirectory()) {
+        await walk(fullPath, archivePath)
+      } else {
+        files[archivePath] = Bun.file(fullPath)
+      }
+    }
+  }
+
+  await walk(dir)
+  return new Bun.Archive(files, compress ? { compress: 'gzip' } : undefined)
+}

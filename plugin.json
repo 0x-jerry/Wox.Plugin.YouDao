@@ -1,20 +1,986 @@
 {
-    "Id": "39296815-0f5e-4f95-9f88-a466df5aea0e",
-    "TriggerKeywords": [
-        "yd"
-    ],
-    "Name": "YouDao translator",
-    "Description": "YouDao translation plugin for Wox",
-    "Author": "x.jerry.wang@gmail.com",
-    "Version": "0.0.1",
-    "MinWoxVersion": "2.0.0",
-    "Runtime": "nodejs",
-    "Website": "https://github.com/0x-jerry/Wox.Plugin.YouDao",
-    "Entry": "index.cjs",
-    "Icon": "relative:images/app.svg",
-    "SupportedOS": [
-        "windows",
-        "linux",
-        "darwin"
-    ]
+  "Id": "39296815-0f5e-4f95-9f88-a466df5aea0e",
+  "TriggerKeywords": ["yd"],
+  "Name": "YouDao translator",
+  "Description": "YouDao translation plugin for Wox",
+  "Author": "x.jerry.wang@gmail.com",
+  "Version": "0.0.1",
+  "MinWoxVersion": "2.0.0",
+  "Runtime": "nodejs",
+  "Website": "https://github.com/0x-jerry/Wox.Plugin.YouDao",
+  "Entry": "index.cjs",
+  "Icon": "relative:images/app.svg",
+  "SupportedOS": ["windows", "linux", "darwin"],
+  "SettingDefinitions": [
+    {
+      "Type": "textbox",
+      "Value": {
+        "Key": "appKey",
+        "Label": "App Key",
+        "Suffix": "",
+        "DefaultValue": "",
+        "Tooltip": "Youdao OpenAPI app key, get it from https://ai.youdao.com/console/",
+        "MaxLines": 1,
+        "Validators": [],
+        "Style": {
+          "Width": 500
+        }
+      }
+    },
+    {
+      "Type": "textbox",
+      "Value": {
+        "Key": "appSecret",
+        "Label": "App Secret",
+        "Suffix": "",
+        "DefaultValue": "",
+        "Tooltip": "Youdao OpenAPI app secret",
+        "MaxLines": 1,
+        "Validators": [],
+        "Style": {
+          "Width": 500
+        }
+      }
+    },
+    {
+      "Type": "checkbox",
+      "Value": {
+        "Key": "handleAnnotation",
+        "Label": "Strip Code Annotations",
+        "DefaultValue": "false",
+        "Tooltip": "Remove //, /* */, //! and /// before translating",
+        "Style": {
+          "Width": 500
+        }
+      }
+    },
+    {
+      "Type": "select",
+      "Value": {
+        "Key": "fromLanguage",
+        "Label": "From Language",
+        "Suffix": "",
+        "DefaultValue": "auto",
+        "Tooltip": "Default source language",
+        "Options": [
+          {
+            "Label": "Auto",
+            "Value": "auto"
+          },
+          {
+            "Label": "Chinese",
+            "Value": "zh-CHS"
+          },
+          {
+            "Label": "English",
+            "Value": "en"
+          },
+          {
+            "Label": "Japanese",
+            "Value": "ja"
+          },
+          {
+            "Label": "Korean",
+            "Value": "ko"
+          },
+          {
+            "Label": "French",
+            "Value": "fr"
+          },
+          {
+            "Label": "Spanish",
+            "Value": "es"
+          },
+          {
+            "Label": "Portuguese",
+            "Value": "pt"
+          },
+          {
+            "Label": "Italian",
+            "Value": "it"
+          },
+          {
+            "Label": "Russian",
+            "Value": "ru"
+          },
+          {
+            "Label": "Vietnamese",
+            "Value": "vi"
+          },
+          {
+            "Label": "German",
+            "Value": "de"
+          },
+          {
+            "Label": "Arabic",
+            "Value": "ar"
+          },
+          {
+            "Label": "Indonesian",
+            "Value": "id"
+          },
+          {
+            "Label": "Afrikaans",
+            "Value": "af"
+          },
+          {
+            "Label": "Bosnian",
+            "Value": "bs"
+          },
+          {
+            "Label": "Bulgarian",
+            "Value": "bg"
+          },
+          {
+            "Label": "Cantonese",
+            "Value": "yue"
+          },
+          {
+            "Label": "Catalan",
+            "Value": "ca"
+          },
+          {
+            "Label": "Croatian",
+            "Value": "hr"
+          },
+          {
+            "Label": "Czech",
+            "Value": "cs"
+          },
+          {
+            "Label": "Danish",
+            "Value": "da"
+          },
+          {
+            "Label": "Dutch",
+            "Value": "nl"
+          },
+          {
+            "Label": "Estonian",
+            "Value": "et"
+          },
+          {
+            "Label": "Fijian",
+            "Value": "fj"
+          },
+          {
+            "Label": "Finnish",
+            "Value": "fi"
+          },
+          {
+            "Label": "Greek",
+            "Value": "el"
+          },
+          {
+            "Label": "Haitian Creole",
+            "Value": "ht"
+          },
+          {
+            "Label": "Hebrew",
+            "Value": "he"
+          },
+          {
+            "Label": "Hindi",
+            "Value": "hi"
+          },
+          {
+            "Label": "Hungarian",
+            "Value": "hu"
+          },
+          {
+            "Label": "Swahili",
+            "Value": "sw"
+          },
+          {
+            "Label": "Latvian",
+            "Value": "lv"
+          },
+          {
+            "Label": "Lithuanian",
+            "Value": "lt"
+          },
+          {
+            "Label": "Malay",
+            "Value": "ms"
+          },
+          {
+            "Label": "Maltese",
+            "Value": "mt"
+          },
+          {
+            "Label": "Norwegian",
+            "Value": "no"
+          },
+          {
+            "Label": "Persian",
+            "Value": "fa"
+          },
+          {
+            "Label": "Polish",
+            "Value": "pl"
+          },
+          {
+            "Label": "Romanian",
+            "Value": "ro"
+          },
+          {
+            "Label": "Slovak",
+            "Value": "sk"
+          },
+          {
+            "Label": "Slovenian",
+            "Value": "sl"
+          },
+          {
+            "Label": "Swedish",
+            "Value": "sv"
+          },
+          {
+            "Label": "Tahitian",
+            "Value": "ty"
+          },
+          {
+            "Label": "Thai",
+            "Value": "th"
+          },
+          {
+            "Label": "Tongan",
+            "Value": "to"
+          },
+          {
+            "Label": "Turkish",
+            "Value": "tr"
+          },
+          {
+            "Label": "Ukrainian",
+            "Value": "uk"
+          },
+          {
+            "Label": "Urdu",
+            "Value": "ur"
+          },
+          {
+            "Label": "Welsh",
+            "Value": "cy"
+          },
+          {
+            "Label": "Albanian",
+            "Value": "sq"
+          },
+          {
+            "Label": "Amharic",
+            "Value": "am"
+          },
+          {
+            "Label": "Armenian",
+            "Value": "hy"
+          },
+          {
+            "Label": "Azerbaijani",
+            "Value": "az"
+          },
+          {
+            "Label": "Bengali",
+            "Value": "bn"
+          },
+          {
+            "Label": "Basque",
+            "Value": "eu"
+          },
+          {
+            "Label": "Belarusian",
+            "Value": "be"
+          },
+          {
+            "Label": "Corsican",
+            "Value": "co"
+          },
+          {
+            "Label": "Esperanto",
+            "Value": "eo"
+          },
+          {
+            "Label": "Filipino",
+            "Value": "tl"
+          },
+          {
+            "Label": "Frisian",
+            "Value": "fy"
+          },
+          {
+            "Label": "Galician",
+            "Value": "gl"
+          },
+          {
+            "Label": "Georgian",
+            "Value": "ka"
+          },
+          {
+            "Label": "Gujarati",
+            "Value": "gu"
+          },
+          {
+            "Label": "Hausa",
+            "Value": "ha"
+          },
+          {
+            "Label": "Icelandic",
+            "Value": "is"
+          },
+          {
+            "Label": "Igbo",
+            "Value": "ig"
+          },
+          {
+            "Label": "Irish",
+            "Value": "ga"
+          },
+          {
+            "Label": "Javanese",
+            "Value": "jw"
+          },
+          {
+            "Label": "Kannada",
+            "Value": "kn"
+          },
+          {
+            "Label": "Kazakh",
+            "Value": "kk"
+          },
+          {
+            "Label": "Cambodian",
+            "Value": "km"
+          },
+          {
+            "Label": "Kurdish",
+            "Value": "ku"
+          },
+          {
+            "Label": "Kirgiz",
+            "Value": "ky"
+          },
+          {
+            "Label": "Lao",
+            "Value": "lo"
+          },
+          {
+            "Label": "Latin",
+            "Value": "la"
+          },
+          {
+            "Label": "Luxembourgish",
+            "Value": "lb"
+          },
+          {
+            "Label": "Macedonian",
+            "Value": "mk"
+          },
+          {
+            "Label": "Malagasy",
+            "Value": "mg"
+          },
+          {
+            "Label": "Malayalam",
+            "Value": "ml"
+          },
+          {
+            "Label": "Maori",
+            "Value": "mi"
+          },
+          {
+            "Label": "Marathi",
+            "Value": "mr"
+          },
+          {
+            "Label": "Mongolian",
+            "Value": "mn"
+          },
+          {
+            "Label": "Burmese",
+            "Value": "my"
+          },
+          {
+            "Label": "Nepali",
+            "Value": "ne"
+          },
+          {
+            "Label": "Chichewa",
+            "Value": "ny"
+          },
+          {
+            "Label": "Pashto",
+            "Value": "ps"
+          },
+          {
+            "Label": "Punjabi",
+            "Value": "pa"
+          },
+          {
+            "Label": "Samoan",
+            "Value": "sm"
+          },
+          {
+            "Label": "Scottish Gaelic",
+            "Value": "gd"
+          },
+          {
+            "Label": "Sesotho",
+            "Value": "st"
+          },
+          {
+            "Label": "Shona",
+            "Value": "sn"
+          },
+          {
+            "Label": "Sindhi",
+            "Value": "sd"
+          },
+          {
+            "Label": "Sinhala",
+            "Value": "si"
+          },
+          {
+            "Label": "Somali",
+            "Value": "so"
+          },
+          {
+            "Label": "Sundanese",
+            "Value": "su"
+          },
+          {
+            "Label": "Tajik",
+            "Value": "tg"
+          },
+          {
+            "Label": "Tamil",
+            "Value": "ta"
+          },
+          {
+            "Label": "Telugu",
+            "Value": "te"
+          },
+          {
+            "Label": "Uzbek",
+            "Value": "uz"
+          },
+          {
+            "Label": "South African Xhosa",
+            "Value": "xh"
+          },
+          {
+            "Label": "Yiddish",
+            "Value": "yi"
+          },
+          {
+            "Label": "Yoruba",
+            "Value": "yo"
+          },
+          {
+            "Label": "Zulu, South Africa",
+            "Value": "zu"
+          },
+          {
+            "Label": "Hawaiian",
+            "Value": "haw"
+          },
+          {
+            "Label": "Cebuano",
+            "Value": "ceb"
+          },
+          {
+            "Label": "Yucatan Maya",
+            "Value": "yua"
+          },
+          {
+            "Label": "Serbian-Cyrillic",
+            "Value": "sr-Cyrl"
+          },
+          {
+            "Label": "Serbian-Latin",
+            "Value": "sr-Latn"
+          },
+          {
+            "Label": "Queretaro Otomi",
+            "Value": "otq"
+          },
+          {
+            "Label": "Klingon",
+            "Value": "tlh"
+          },
+          {
+            "Label": "Bai Hmong",
+            "Value": "mww"
+          }
+        ],
+        "Validators": [],
+        "Style": {
+          "Width": 500
+        }
+      }
+    },
+    {
+      "Type": "select",
+      "Value": {
+        "Key": "toLanguage",
+        "Label": "To Language",
+        "Suffix": "",
+        "DefaultValue": "auto",
+        "Tooltip": "Default target language",
+        "Options": [
+          {
+            "Label": "Auto",
+            "Value": "auto"
+          },
+          {
+            "Label": "Chinese",
+            "Value": "zh-CHS"
+          },
+          {
+            "Label": "English",
+            "Value": "en"
+          },
+          {
+            "Label": "Japanese",
+            "Value": "ja"
+          },
+          {
+            "Label": "Korean",
+            "Value": "ko"
+          },
+          {
+            "Label": "French",
+            "Value": "fr"
+          },
+          {
+            "Label": "Spanish",
+            "Value": "es"
+          },
+          {
+            "Label": "Portuguese",
+            "Value": "pt"
+          },
+          {
+            "Label": "Italian",
+            "Value": "it"
+          },
+          {
+            "Label": "Russian",
+            "Value": "ru"
+          },
+          {
+            "Label": "Vietnamese",
+            "Value": "vi"
+          },
+          {
+            "Label": "German",
+            "Value": "de"
+          },
+          {
+            "Label": "Arabic",
+            "Value": "ar"
+          },
+          {
+            "Label": "Indonesian",
+            "Value": "id"
+          },
+          {
+            "Label": "Afrikaans",
+            "Value": "af"
+          },
+          {
+            "Label": "Bosnian",
+            "Value": "bs"
+          },
+          {
+            "Label": "Bulgarian",
+            "Value": "bg"
+          },
+          {
+            "Label": "Cantonese",
+            "Value": "yue"
+          },
+          {
+            "Label": "Catalan",
+            "Value": "ca"
+          },
+          {
+            "Label": "Croatian",
+            "Value": "hr"
+          },
+          {
+            "Label": "Czech",
+            "Value": "cs"
+          },
+          {
+            "Label": "Danish",
+            "Value": "da"
+          },
+          {
+            "Label": "Dutch",
+            "Value": "nl"
+          },
+          {
+            "Label": "Estonian",
+            "Value": "et"
+          },
+          {
+            "Label": "Fijian",
+            "Value": "fj"
+          },
+          {
+            "Label": "Finnish",
+            "Value": "fi"
+          },
+          {
+            "Label": "Greek",
+            "Value": "el"
+          },
+          {
+            "Label": "Haitian Creole",
+            "Value": "ht"
+          },
+          {
+            "Label": "Hebrew",
+            "Value": "he"
+          },
+          {
+            "Label": "Hindi",
+            "Value": "hi"
+          },
+          {
+            "Label": "Hungarian",
+            "Value": "hu"
+          },
+          {
+            "Label": "Swahili",
+            "Value": "sw"
+          },
+          {
+            "Label": "Latvian",
+            "Value": "lv"
+          },
+          {
+            "Label": "Lithuanian",
+            "Value": "lt"
+          },
+          {
+            "Label": "Malay",
+            "Value": "ms"
+          },
+          {
+            "Label": "Maltese",
+            "Value": "mt"
+          },
+          {
+            "Label": "Norwegian",
+            "Value": "no"
+          },
+          {
+            "Label": "Persian",
+            "Value": "fa"
+          },
+          {
+            "Label": "Polish",
+            "Value": "pl"
+          },
+          {
+            "Label": "Romanian",
+            "Value": "ro"
+          },
+          {
+            "Label": "Slovak",
+            "Value": "sk"
+          },
+          {
+            "Label": "Slovenian",
+            "Value": "sl"
+          },
+          {
+            "Label": "Swedish",
+            "Value": "sv"
+          },
+          {
+            "Label": "Tahitian",
+            "Value": "ty"
+          },
+          {
+            "Label": "Thai",
+            "Value": "th"
+          },
+          {
+            "Label": "Tongan",
+            "Value": "to"
+          },
+          {
+            "Label": "Turkish",
+            "Value": "tr"
+          },
+          {
+            "Label": "Ukrainian",
+            "Value": "uk"
+          },
+          {
+            "Label": "Urdu",
+            "Value": "ur"
+          },
+          {
+            "Label": "Welsh",
+            "Value": "cy"
+          },
+          {
+            "Label": "Albanian",
+            "Value": "sq"
+          },
+          {
+            "Label": "Amharic",
+            "Value": "am"
+          },
+          {
+            "Label": "Armenian",
+            "Value": "hy"
+          },
+          {
+            "Label": "Azerbaijani",
+            "Value": "az"
+          },
+          {
+            "Label": "Bengali",
+            "Value": "bn"
+          },
+          {
+            "Label": "Basque",
+            "Value": "eu"
+          },
+          {
+            "Label": "Belarusian",
+            "Value": "be"
+          },
+          {
+            "Label": "Corsican",
+            "Value": "co"
+          },
+          {
+            "Label": "Esperanto",
+            "Value": "eo"
+          },
+          {
+            "Label": "Filipino",
+            "Value": "tl"
+          },
+          {
+            "Label": "Frisian",
+            "Value": "fy"
+          },
+          {
+            "Label": "Galician",
+            "Value": "gl"
+          },
+          {
+            "Label": "Georgian",
+            "Value": "ka"
+          },
+          {
+            "Label": "Gujarati",
+            "Value": "gu"
+          },
+          {
+            "Label": "Hausa",
+            "Value": "ha"
+          },
+          {
+            "Label": "Icelandic",
+            "Value": "is"
+          },
+          {
+            "Label": "Igbo",
+            "Value": "ig"
+          },
+          {
+            "Label": "Irish",
+            "Value": "ga"
+          },
+          {
+            "Label": "Javanese",
+            "Value": "jw"
+          },
+          {
+            "Label": "Kannada",
+            "Value": "kn"
+          },
+          {
+            "Label": "Kazakh",
+            "Value": "kk"
+          },
+          {
+            "Label": "Cambodian",
+            "Value": "km"
+          },
+          {
+            "Label": "Kurdish",
+            "Value": "ku"
+          },
+          {
+            "Label": "Kirgiz",
+            "Value": "ky"
+          },
+          {
+            "Label": "Lao",
+            "Value": "lo"
+          },
+          {
+            "Label": "Latin",
+            "Value": "la"
+          },
+          {
+            "Label": "Luxembourgish",
+            "Value": "lb"
+          },
+          {
+            "Label": "Macedonian",
+            "Value": "mk"
+          },
+          {
+            "Label": "Malagasy",
+            "Value": "mg"
+          },
+          {
+            "Label": "Malayalam",
+            "Value": "ml"
+          },
+          {
+            "Label": "Maori",
+            "Value": "mi"
+          },
+          {
+            "Label": "Marathi",
+            "Value": "mr"
+          },
+          {
+            "Label": "Mongolian",
+            "Value": "mn"
+          },
+          {
+            "Label": "Burmese",
+            "Value": "my"
+          },
+          {
+            "Label": "Nepali",
+            "Value": "ne"
+          },
+          {
+            "Label": "Chichewa",
+            "Value": "ny"
+          },
+          {
+            "Label": "Pashto",
+            "Value": "ps"
+          },
+          {
+            "Label": "Punjabi",
+            "Value": "pa"
+          },
+          {
+            "Label": "Samoan",
+            "Value": "sm"
+          },
+          {
+            "Label": "Scottish Gaelic",
+            "Value": "gd"
+          },
+          {
+            "Label": "Sesotho",
+            "Value": "st"
+          },
+          {
+            "Label": "Shona",
+            "Value": "sn"
+          },
+          {
+            "Label": "Sindhi",
+            "Value": "sd"
+          },
+          {
+            "Label": "Sinhala",
+            "Value": "si"
+          },
+          {
+            "Label": "Somali",
+            "Value": "so"
+          },
+          {
+            "Label": "Sundanese",
+            "Value": "su"
+          },
+          {
+            "Label": "Tajik",
+            "Value": "tg"
+          },
+          {
+            "Label": "Tamil",
+            "Value": "ta"
+          },
+          {
+            "Label": "Telugu",
+            "Value": "te"
+          },
+          {
+            "Label": "Uzbek",
+            "Value": "uz"
+          },
+          {
+            "Label": "South African Xhosa",
+            "Value": "xh"
+          },
+          {
+            "Label": "Yiddish",
+            "Value": "yi"
+          },
+          {
+            "Label": "Yoruba",
+            "Value": "yo"
+          },
+          {
+            "Label": "Zulu, South Africa",
+            "Value": "zu"
+          },
+          {
+            "Label": "Hawaiian",
+            "Value": "haw"
+          },
+          {
+            "Label": "Cebuano",
+            "Value": "ceb"
+          },
+          {
+            "Label": "Yucatan Maya",
+            "Value": "yua"
+          },
+          {
+            "Label": "Serbian-Cyrillic",
+            "Value": "sr-Cyrl"
+          },
+          {
+            "Label": "Serbian-Latin",
+            "Value": "sr-Latn"
+          },
+          {
+            "Label": "Queretaro Otomi",
+            "Value": "otq"
+          },
+          {
+            "Label": "Klingon",
+            "Value": "tlh"
+          },
+          {
+            "Label": "Bai Hmong",
+            "Value": "mww"
+          }
+        ],
+        "Validators": [],
+        "Style": {
+          "Width": 500
+        }
+      }
+    }
+  ]
 }
