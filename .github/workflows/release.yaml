@@ -19,7 +19,7 @@ jobs:
           fetch-all: true
 
       - name: build
-        run: bun i && bun run build
+        run: bun i && bun run pack
 
       - name: Release
         id: create-release
