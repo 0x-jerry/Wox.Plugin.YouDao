@@ -9,7 +9,7 @@ for await (const line of $`tsdown`.lines()) {
 
 const archive = await archiveDirectory('dist')
 
-Bun.write(`Wox.Plugin.YouDao.wox`, archive)
+await Bun.write(`Wox.Plugin.YouDao.wox`, archive)
 
 async function archiveDirectory(dir: string, compress = false): Promise<Bun.Archive> {
   const files: Record<string, Blob> = {}

@@ -1,7 +1,7 @@
 {
   "Id": "39296815-0f5e-4f95-9f88-a466df5aea0e",
   "TriggerKeywords": ["yd"],
-  "Name": "YouDao translator",
+  "Name": "YouDao Translator",
   "Description": "YouDao translation plugin for Wox",
   "Author": "x.jerry.wang@gmail.com",
   "Version": "0.0.1",

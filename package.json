@@ -5,9 +5,11 @@
   "scripts": {
     "build": "tsdown",
     "pack": "bun run scripts/pack.ts",
-    "fmt": "oxfmt src"
+    "fmt": "oxfmt src",
+    "release": "x-release"
   },
   "devDependencies": {
+    "@0x-jerry/x-release": "^3.0.5",
     "@types/bun": "^1.3.14",
     "@types/node": "^26.0.0",
     "oxfmt": "^0.56.0",

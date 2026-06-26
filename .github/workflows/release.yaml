@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Setup bun
+        uses: 0x-jerry/workflows/actions/setup-js@main
+        with:
+          fetch-all: true
+
+      - name: build
+        run: bun i && bun run build
+
+      - name: Release
+        id: create-release
+        uses: 0x-jerry/workflows/actions/changelog@main
+        with:
+          files: Wox.Plugin.YouDao.wox
