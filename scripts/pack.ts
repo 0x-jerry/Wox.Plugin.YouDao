@@ -1,34 +1,23 @@
 import { $ } from 'bun'
-import { readdir } from 'node:fs/promises'
-import { join } from 'node:path'
+import path from 'node:path'
+import { zipSync } from 'fflate'
 
 // build
 for await (const line of $`tsdown`.lines()) {
   console.log(line)
 }
 
-const archive = await archiveDirectory('dist')
+const archive = await createZipFile(path.resolve('dist'), true)
 
 await Bun.write(`Wox.Plugin.YouDao.wox`, archive)
 
-async function archiveDirectory(dir: string, compress = false): Promise<Bun.Archive> {
-  const files: Record<string, Blob> = {}
+async function createZipFile(dir: string, compress = false): Promise<Uint8Array> {
+  const files: Record<string, Uint8Array> = {}
 
-  async function walk(currentDir: string, prefix: string = '') {
-    const entries = await readdir(currentDir, { withFileTypes: true })
-
-    for (const entry of entries) {
-      const fullPath = join(currentDir, entry.name)
-      const archivePath = prefix ? `${prefix}/${entry.name}` : entry.name
-
-      if (entry.isDirectory()) {
-        await walk(fullPath, archivePath)
-      } else {
-        files[archivePath] = Bun.file(fullPath)
-      }
-    }
+  const glob = new Bun.Glob('**/*')
+  for await (const filePath of glob.scan(dir)) {
+    files[filePath] = await Bun.file(path.join(dir, filePath)).bytes()
   }
 
-  await walk(dir)
-  return new Bun.Archive(files, compress ? { compress: 'gzip' } : undefined)
+  return zipSync(files)
 }
