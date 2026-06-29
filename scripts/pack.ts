@@ -7,11 +7,11 @@ for await (const line of $`tsdown`.lines()) {
   console.log(line)
 }
 
-const archive = await createZipFile(path.resolve('dist'), true)
+const archive = await createZipFile(path.resolve('dist'))
 
 await Bun.write(`Wox.Plugin.YouDao.wox`, archive)
 
-async function createZipFile(dir: string, compress = false): Promise<Uint8Array> {
+async function createZipFile(dir: string): Promise<Uint8Array> {
   const files: Record<string, Uint8Array> = {}
 
   const glob = new Bun.Glob('**/*')
